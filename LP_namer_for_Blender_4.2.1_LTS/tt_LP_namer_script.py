@@ -19,29 +19,6 @@ def rename_objects(objects):
         for i, obj in enumerate(group, start=1):
             obj.name = f"{i}_{base_name}"
 
-def set_shade_smooth(obj):
-    """
-    Включает shade smooth для объекта и устанавливает авто-сглаживание.
-    """
-    if obj.type == 'MESH':
-        bpy.context.view_layer.objects.active = obj
-
-        # Переключаем в режим редактирования
-        bpy.ops.object.mode_set(mode='EDIT')
-
-        # Применяем shade smooth ко всем граням
-        bpy.ops.mesh.faces_shade_smooth()
-
-        # Возвращаемся в режим объекта
-        bpy.ops.object.mode_set(mode='OBJECT')
-
-        # Устанавливаем авто-сглаживание для всех полигонами
-        mesh = obj.data
-        if hasattr(mesh, 'use_auto_smooth'):
-            mesh.use_auto_smooth = True  # Устанавливаем авто-сглаживание
-        if hasattr(mesh, 'auto_smooth_angle'):
-            mesh.auto_smooth_angle = 3.14159  # 180 градусов в радианах
-
 def apply_modifiers(objects):
     """
     Применяет модификаторы к уникальным объектам.
@@ -161,6 +138,29 @@ def duplicate_and_modify_meshes(collection, max_objects=None):
 
     # Восстанавливаем связи между оригиналами и дубликатами
     restore_linked_object_data(linked_objects, original_to_duplicate)
+
+    def set_shade_smooth(obj):
+    """
+    Включает shade smooth для объекта и устанавливает авто-сглаживание.
+    """
+    if obj.type == 'MESH':
+        bpy.context.view_layer.objects.active = obj
+
+        # Переключаем в режим редактирования
+        bpy.ops.object.mode_set(mode='EDIT')
+
+        # Применяем shade smooth ко всем граням
+        bpy.ops.mesh.faces_shade_smooth()
+
+        # Возвращаемся в режим объекта
+        bpy.ops.object.mode_set(mode='OBJECT')
+
+        # Устанавливаем авто-сглаживание для всех полигонами
+        mesh = obj.data
+        if hasattr(mesh, 'use_auto_smooth'):
+            mesh.use_auto_smooth = True  # Устанавливаем авто-сглаживание
+        if hasattr(mesh, 'auto_smooth_angle'):
+            mesh.auto_smooth_angle = 3.14159  # 180 градусов в радианах
 
 # Получаем активную коллекцию
 active_collection = bpy.context.view_layer.active_layer_collection.collection
